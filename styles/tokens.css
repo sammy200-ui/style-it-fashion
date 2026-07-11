@@ -1,0 +1,41 @@
+/* ==========================================================================
+   Design Tokens — Style-It Meeting Management Platform
+   Two separate visual systems (Section 7 of plan.md)
+   ========================================================================== */
+
+:root {
+  /* ── A. Product / App UI (SIRUS-style screens) ────────────────────────── */
+  --primary: #4F39F6;          /* main indigo-violet — buttons, active states, AI Assist */
+  --primary-deep: #4E2AC8;     /* darker variant — chart/ring fills */
+  --ink: #0F172B;              /* near-black navy — dark CTA buttons, headings */
+  --bg-tint: #F5F3FF;          /* very light lavender — page background */
+  --success: #20C06F;          /* compliant / low risk */
+  --danger: #EC482F;           /* critical risk */
+  --warning: #F2BB19;          /* medium risk / premium-tier gold accent */
+  --muted-violet: #887AF8;     /* secondary labels, tier-card headings */
+
+  /* Derived UI tokens */
+  --primary-light: #EDE9FE;    /* light violet for hover states, cards */
+  --primary-ghost: #F5F3FF;    /* ghost button backgrounds */
+  --surface: #FFFFFF;          /* card / panel backgrounds */
+  --surface-elevated: #FFFFFF; /* elevated surfaces (modals, dropdowns) */
+  --border: #E2E5EB;           /* default borders */
+  --border-light: #F0F0F4;     /* subtle borders */
+  --text-secondary: #64748B;   /* secondary text, placeholders */
+  --text-tertiary: #94A3B8;    /* tertiary text, timestamps */
+
+  /* ── B. Report / Document theme (inside Document Editor content pane) ── */
+  /* Prefixed --report-* to avoid collision with app-level tokens          */
+  --report-accent: #2F69FF;
+  --report-accent-dark: #101936;
+  --report-accent-gold: #F6BF2F;
+  --report-ink: #101936;
+  --report-ink-soft: #25304B;
+  --report-muted: #9AA8C2;
+  --report-line: #E2E8F3;
+  --report-bg-tint: #F5F8FD;
+  --report-ok: #198C61;
+  --report-warn: #B98313;
+  --report-danger: #D94B4B;
+  --report-info: #7A5AF8;
+}

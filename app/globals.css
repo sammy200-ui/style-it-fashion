@@ -1,0 +1,74 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* ── Tailwind v4: Register custom colors as theme tokens ─────────────── */
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-outfit);
+
+  /* App UI palette */
+  --color-primary: var(--primary);
+  --color-primary-deep: var(--primary-deep);
+  --color-primary-light: var(--primary-light);
+  --color-primary-ghost: var(--primary-ghost);
+  --color-ink: var(--ink);
+  --color-bg-tint: var(--bg-tint);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-muted-violet: var(--muted-violet);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-border: var(--border);
+  --color-border-light: var(--border-light);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+
+  /* Report / Document palette */
+  --color-report-accent: var(--report-accent);
+  --color-report-accent-dark: var(--report-accent-dark);
+  --color-report-accent-gold: var(--report-accent-gold);
+  --color-report-ink: var(--report-ink);
+  --color-report-ink-soft: var(--report-ink-soft);
+  --color-report-muted: var(--report-muted);
+  --color-report-line: var(--report-line);
+  --color-report-bg-tint: var(--report-bg-tint);
+  --color-report-ok: var(--report-ok);
+  --color-report-warn: var(--report-warn);
+  --color-report-danger: var(--report-danger);
+  --color-report-info: var(--report-info);
+}
+
+/* ── Base resets ─────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-tint);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings use Outfit */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-outfit), var(--font-inter), system-ui, sans-serif;
+}
+
+/* ── Utility classes ─────────────────────────────────────────────────── */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+.glass-border {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
