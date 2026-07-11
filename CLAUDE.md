@@ -1,1 +1,2 @@
 @AGENTS.md
+ok so i have pushed the chunk 1 myself - lets move on the chunk 2 - so before that i have shared with you the reference photos that the company shared with us - also there is the .html file - i am not exactly sure whats the use of that file but you will get it - your task is to analyse whole thing and then start working on chunk 2 - also dont open up the browser yourself - i will do that and will let you know if soemthing is the issue 

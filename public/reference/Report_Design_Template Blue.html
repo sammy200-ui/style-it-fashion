@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Report Design Template</title>
+<style>
+  /* ============================================================
+     REPORT DESIGN TEMPLATE — BLANK / REUSABLE
+     Extracted from the "Official Minutes" report design system.
+     ------------------------------------------------------------
+     HOW TO USE
+     1. Each <div class="page"> is one printable page (A4-ish,
+        page-break-after:always). Duplicate a page block and
+        replace the placeholder text with real content.
+     2. Colors, fonts and spacing all live in :root as CSS
+        variables below — change the palette once, it cascades
+        everywhere. Swap --accent for a new brand color and the
+        whole report re-themes.
+     3. Reusable content blocks (all in the component library
+        further down and shown in Section 5):
+          - .kv-table          key/value definition table
+          - .exec-card         highlighted summary callout
+          - .data-table        striped data / attendance table
+          - .speaker           discussion-log speaker bubble
+          - .alert             color-coded alert callout
+              variants: .alert-decision / .alert-unresolved /
+                        .alert-tension / .alert-projection
+          - .timeline          vertical dotted timeline
+          - .vote-block        vote header + result table
+          - .section-label     small eyebrow label above H2
+     4. Everything is plain HTML + inline-friendly CSS classes
+        (works if pasted into email/PDF tools that strip <style>,
+        since each element also carries safe fallback styling
+        patterns). For best results keep the <style> block intact.
+     5. To export to PDF: print this file (Cmd/Ctrl+P) with
+        background graphics enabled, or run it through a
+        HTML-to-PDF tool page by page.
+     ============================================================ */
+
+  :root{
+    /* ---- brand palette (swap these to re-theme everything) ---- */
+    --accent:      #2F69FF;   /* primary brand blue */
+    --accent-dark: #101936;   /* near-black navy, headings */
+    --accent-gold: #F6BF2F;   /* small decorative accent */
+    --ink:         #101936;   /* primary text */
+    --ink-soft:    #25304B;   /* body text */
+    --muted:       #9AA8C2;   /* labels / eyebrow text */
+    --line:        #E2E8F3;   /* hairline borders */
+    --line-soft:   #ECF1F8;
+    --bg-tint:     #F5F8FD;   /* light card background */
+    --bg-row:      #F5F8FD;
+
+    /* ---- status colors for alerts / speaker roles ---- */
+    --ok:          #198C61;   /* decisions / positive / resolved */
+    --warn:        #B98313;   /* unresolved / pending */
+    --danger:      #D94B4B;   /* tension / blockage */
+    --info:        #7A5AF8;   /* projection / deadline / votes */
+
+    --font: 'Inter','Helvetica Neue',Arial,sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#EDF1F8; font-family:var(--font); }
+
+  .page{
+    page-break-after:always;
+    width:100%;
+    max-width:900px;
+    min-height:100vh;
+    margin:0 auto;
+    box-sizing:border-box;
+    padding:46px 66px 42px 66px;
+    background-color:#FFFFFF;
+    color:var(--ink);
+    font-family:var(--font);
+  }
+
+  /* running header / footer strip repeated on every page */
+  .doc-header{
+    width:100%; border-collapse:collapse; margin:0 0 24px 0;
+  }
+  .doc-header td{
+    color:var(--muted); font-size:11px; letter-spacing:1.6px; text-transform:uppercase;
+  }
+  .doc-header td.right{ text-align:right; }
+
+  .doc-footer{ width:100%; border-collapse:collapse; margin:32px 0 0 0; }
+  .doc-footer td{ color:var(--muted); font-size:11px; letter-spacing:1.6px; text-transform:uppercase; }
+  .doc-footer td.right{ text-align:right; }
+
+  /* ---- cover page ---- */
+  .eyebrow{
+    margin:0 0 22px 0; color:var(--accent); font-size:13px; line-height:1.35;
+    font-weight:800; letter-spacing:4px; text-transform:uppercase;
+  }
+  .eyebrow .star{ color:var(--accent-gold); font-size:15px; margin-right:10px; }
+  .h1-cover{
+    margin:0; color:var(--accent); font-size:44px; line-height:1.02; font-weight:800;
+    letter-spacing:0; max-width:790px;
+  }
+  .subtitle{
+    margin:16px 0 34px 0; color:#6C7898; font-size:20px; line-height:1.35; font-weight:700;
+  }
+  .rule{ height:3px; background-color:var(--accent-dark); margin:0 0 22px 0; }
+
+  .stat-row{ width:100%; border-collapse:separate; border-spacing:14px 0; margin:0 -14px 30px -14px; }
+  .stat-cell{
+    width:25%; padding:17px 20px 18px 20px; border:2px solid var(--accent);
+    border-bottom-color:var(--accent-gold); border-radius:14px; vertical-align:top;
+  }
+  .stat-label{ margin:0 0 10px 0; color:var(--muted); font-size:11px; font-weight:800; letter-spacing:2px; text-transform:uppercase; }
+  .stat-value{ margin:0; color:var(--ink); font-size:17px; line-height:1.25; font-weight:800; }
+
+  .lede{ margin:0 0 30px 0; color:#485573; font-size:18px; line-height:1.55; max-width:880px; }
+
+  /* ---- section heading system ---- */
+  .section-label{
+    margin:0 0 8px 0; color:var(--accent); font-size:13px; font-weight:900;
+    letter-spacing:2.8px; text-transform:uppercase;
+  }
+  h2.section-title{
+    margin:0 0 28px 0; padding-bottom:16px; border-bottom:1px solid var(--line);
+    color:var(--ink); font-size:26px; line-height:1.15; font-weight:900;
+  }
+  h2.subsection-title{
+    margin:0 0 18px 0; padding-bottom:14px; border-bottom:1px solid var(--line);
+    color:var(--ink); font-size:17px; line-height:1.3; font-weight:900;
+    letter-spacing:4px; text-transform:uppercase;
+  }
+  h3.part-title{
+    margin:30px 0 16px 0; color:var(--ink); font-size:20px; line-height:1.25;
+    font-weight:900; border-bottom:1px solid var(--line); padding-bottom:10px;
+  }
+  h4.item-title{ margin:24px 0 12px 0; color:var(--ink); font-size:17px; line-height:1.35; font-weight:900; }
+  .category-label{ margin:24px 0 10px 0; color:var(--accent); font-size:13px; font-weight:900; letter-spacing:2px; text-transform:uppercase; }
+  p.body-text{ margin:0 0 12px 0; color:var(--ink-soft); font-size:15px; line-height:1.68; }
+
+  /* ---- key/value definition table ---- */
+  table.kv-table{ width:100%; border-collapse:collapse; font-size:14px; margin:0 0 22px 0; }
+  table.kv-table td.k{
+    width:34%; padding:13px 16px; color:var(--muted); font-size:11px; font-weight:900;
+    letter-spacing:1.5px; text-transform:uppercase; background:var(--bg-tint); vertical-align:top;
+  }
+  table.kv-table td.v{
+    padding:13px 16px; color:var(--ink); background:#FFFFFF; border-bottom:1px solid var(--line-soft);
+    vertical-align:top; font-size:14px; line-height:1.55;
+  }
+
+  /* ---- executive summary card ---- */
+  .exec-card{
+    padding:20px 24px; background:var(--bg-tint); border-left:4px solid var(--accent);
+    border-radius:12px; margin:0 0 18px 0;
+  }
+  .exec-card .label{ margin:0 0 9px 0; color:var(--accent); font-size:12px; font-weight:900; letter-spacing:1.8px; text-transform:uppercase; }
+  .exec-card .text{ margin:0; color:var(--ink); font-size:15px; line-height:1.7; }
+
+  /* ---- avatar + name row (participants list) ---- */
+  .person-row{ width:100%; border-collapse:collapse; }
+  .person-row td.avatar{ width:48px; vertical-align:top; }
+  .avatar-circle{
+    width:36px; height:36px; line-height:36px; border-radius:50%; text-align:center;
+    color:#FFFFFF; font-size:16px; font-weight:800;
+  }
+  .person-name{ margin:0; color:var(--ink); font-size:14px; line-height:1.45; font-weight:800; }
+
+  /* ---- striped data table ---- */
+  table.data-table{ width:100%; border-collapse:collapse; margin:0 0 22px 0; table-layout:fixed; }
+  table.data-table thead th{
+    padding:11px 12px; background:var(--accent-dark); color:#FFFFFF; font-size:11px;
+    line-height:1.35; font-weight:900; letter-spacing:1px; text-transform:uppercase;
+    text-align:left; vertical-align:top;
+  }
+  table.data-table tbody td{
+    padding:11px 12px; border-bottom:1px solid var(--line-soft); color:var(--ink-soft);
+    font-size:13px; line-height:1.45; vertical-align:top;
+  }
+
+  /* ---- discussion-log speaker bubble ---- */
+  .speaker{ display:table; width:100%; border-collapse:collapse; margin:0 0 12px 0; }
+  .speaker .badge-cell{ display:table-cell; width:58px; vertical-align:top; }
+  .speaker .badge{
+    width:38px; height:38px; line-height:38px; border-radius:50%; text-align:center;
+    color:#FFFFFF; font-size:12px; font-weight:900;
+  }
+  .speaker .bubble{
+    display:table-cell; vertical-align:top; padding:16px 20px; background:#FFFFFF;
+    border:1px solid #DCE5F2; border-left:4px solid var(--accent); border-radius:10px;
+  }
+  .speaker .who{ margin:0 0 7px 0; font-size:12px; font-weight:900; letter-spacing:1.2px; text-transform:uppercase; color:var(--accent); }
+  .speaker .said{ margin:0; color:var(--ink-soft); font-size:14px; line-height:1.65; }
+  /* role color modifiers — apply to .badge and .bubble/.who together */
+  .speaker.role-neutral .badge{ background:var(--accent-dark); }
+  .speaker.role-neutral .bubble{ border-left-color:var(--accent-dark); }
+  .speaker.role-neutral .who{ color:var(--accent-dark); }
+  .speaker.role-a .badge{ background:var(--accent); }
+  .speaker.role-a .bubble{ border-left-color:var(--accent); }
+  .speaker.role-a .who{ color:var(--accent); }
+  .speaker.role-b .badge{ background:var(--ok); }
+  .speaker.role-b .bubble{ border-left-color:var(--ok); }
+  .speaker.role-b .who{ color:var(--ok); }
+
+  /* ---- alert callouts ---- */
+  .alert{ padding:20px 24px; border-radius:12px; margin:0 0 18px 0; }
+  .alert .label{ margin:0 0 9px 0; font-size:12px; font-weight:900; letter-spacing:1.8px; text-transform:uppercase; }
+  .alert .field{ margin:0 0 8px 0; color:var(--ink-soft); font-size:14px; line-height:1.6; }
+  .alert .field:last-child{ margin-bottom:0; }
+  .alert .field strong{ color:var(--ink); }
+  .alert-decision{ background:#F2FBF7; border-left:4px solid var(--ok); }
+  .alert-decision .label{ color:var(--ok); }
+  .alert-unresolved{ background:#FFF8E8; border-left:4px solid var(--warn); }
+  .alert-unresolved .label{ color:var(--warn); }
+  .alert-tension{ background:#FFF4F2; border-left:4px solid var(--danger); }
+  .alert-tension .label{ color:var(--danger); }
+  .alert-projection{ background:#F7F4FF; border-left:4px solid var(--info); }
+  .alert-projection .label{ color:var(--info); }
+
+  /* ---- vertical timeline ---- */
+  .timeline-block{ padding:20px 24px; background:var(--bg-tint); border-left:4px solid var(--accent); border-radius:12px; margin:0 0 18px 0; }
+  .timeline-block .label{ margin:0 0 14px 0; color:var(--accent); font-size:12px; font-weight:900; letter-spacing:1.8px; text-transform:uppercase; }
+  table.timeline{ width:100%; border-collapse:collapse; }
+  table.timeline td.dot-cell{ width:34px; vertical-align:top; }
+  table.timeline .dot{ width:12px; height:12px; border-radius:50%; background:var(--accent); margin-top:7px; }
+  table.timeline td.entry{ padding:0 0 13px 0; color:var(--ink-soft); font-size:14px; line-height:1.6; }
+
+  /* ---- vote block ---- */
+  .vote-question{
+    padding:18px 22px; background:var(--bg-tint); border:1px solid #DCE5F2;
+    border-left:4px solid var(--info); border-radius:12px; margin:18px 0 16px 0;
+  }
+  .vote-question p{ margin:0; color:var(--info); font-size:14px; font-weight:900; line-height:1.45; }
+  .vote-date{ padding:20px 24px; background:var(--bg-tint); border-left:4px solid var(--ok); border-radius:12px; margin:0 0 18px 0; }
+  .vote-date .label{ margin:0 0 9px 0; color:var(--ok); font-size:12px; font-weight:900; letter-spacing:1.8px; text-transform:uppercase; }
+  .vote-date .text{ margin:0; color:var(--ink); font-size:15px; line-height:1.7; }
+  .vote-result{ padding:20px 24px; background:var(--bg-tint); border-left:4px solid var(--ok); border-radius:12px; margin:0 0 18px 0; }
+  .vote-result .label{ margin:0 0 9px 0; color:var(--ok); font-size:12px; font-weight:900; letter-spacing:1.8px; text-transform:uppercase; }
+  .vote-result .text{ margin:0; color:var(--ink); font-size:15px; line-height:1.7; }
+
+  /* ---- print helpers ---- */
+  @media print{
+    body{ background:#FFFFFF; }
+    .page{ box-shadow:none; max-width:none; }
+  }
+  @media screen{
+    .page{ box-shadow:0 0 0 1px #DCE5F2, 0 8px 30px rgba(16,25,54,0.06); margin-bottom:24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     PAGE 1 — COVER
+     ========================================================= -->
+<div class="page">
+  <table class="doc-header"><tr>
+    <td>REPORT TYPE &middot; DEPARTMENT OR TEAM NAME</td>
+    <td class="right">PERIOD OR DATE</td>
+  </tr></table>
+
+  <p class="eyebrow"><span class="star">&#9733;</span> REPORT CATEGORY &middot; SESSION OR EDITION LABEL</p>
+  <h1 class="h1-cover">REPORT TITLE GOES HERE<br>Subtitle or Project Name</h1>
+  <p class="subtitle">Organisation Name &middot; Location / Address</p>
+
+  <table class="stat-row"><tr>
+    <td class="stat-cell"><p class="stat-label">Label One</p><p class="stat-value">Value</p></td>
+    <td class="stat-cell"><p class="stat-label">Label Two</p><p class="stat-value">Value</p></td>
+    <td class="stat-cell"><p class="stat-label">Label Three</p><p class="stat-value">Value</p></td>
+    <td class="stat-cell"><p class="stat-label">Label Four</p><p class="stat-value">Value</p></td>
+  </tr></table>
+
+  <div class="rule"></div>
+
+  <p class="lede">One short paragraph summarizing what this report covers, who it's for,
+  and the headline outcome — a scannable abstract that lets a reader decide whether to read on.</p>
+
+  <h2 class="subsection-title">Key Participants / Stakeholders</h2>
+  <table style="width:100%; border-collapse:collapse; margin:0 0 12px 0;"><tr>
+    <td style="width:50%; padding:0 18px 16px 0; vertical-align:top;">
+      <table class="person-row"><tr>
+        <td class="avatar"><div class="avatar-circle" style="background:var(--accent-dark);">1</div></td>
+        <td><p class="person-name">Full Name — Role / Title</p></td>
+      </tr></table>
+    </td>
+    <td style="width:50%; padding:0 18px 16px 0; vertical-align:top;">
+      <table class="person-row"><tr>
+        <td class="avatar"><div class="avatar-circle" style="background:var(--accent);">2</div></td>
+        <td><p class="person-name">Full Name — Role / Title</p></td>
+      </tr></table>
+    </td>
+  </tr></table>
+
+  <table class="doc-footer"><tr>
+    <td>CONFIDENTIAL &middot; INTERNAL USE</td>
+    <td class="right">ORGANISATION NAME</td>
+  </tr></table>
+</div>
+
+<!-- =========================================================
+     PAGE 2 — DOCUMENT METADATA (report label / dates / refs)
+     ========================================================= -->
+<div class="page">
+  <table class="doc-header"><tr><td>REPORT TYPE &middot; DEPARTMENT OR TEAM NAME</td><td class="right">PERIOD OR DATE</td></tr></table>
+  <p class="section-label">Section 1</p>
+  <h2 class="section-title">Document Details</h2>
+
+  <table class="kv-table">
+    <tr><td class="k">Report Label</td><td class="v">Placeholder value</td></tr>
+    <tr><td class="k">Title</td><td class="v">Placeholder value</td></tr>
+    <tr><td class="k">Date</td><td class="v">Placeholder value</td></tr>
+    <tr><td class="k">Type</td><td class="v">Placeholder value</td></tr>
+    <tr><td class="k">Location</td><td class="v">Placeholder value</td></tr>
+    <tr><td class="k">Prepared By</td><td class="v">Placeholder value</td></tr>
+    <tr><td class="k">Reference</td><td class="v">Placeholder value</td></tr>
+  </table>
+
+  <table class="doc-footer"><tr><td>CONFIDENTIAL &middot; INTERNAL USE</td><td class="right">ORGANISATION NAME</td></tr></table>
+</div>
+
+<!-- =========================================================
+     PAGE 3 — NOTICE / SCOPE STATEMENT (optional legal / scope block)
+     ========================================================= -->
+<div class="page">
+  <table class="doc-header"><tr><td>REPORT TYPE &middot; DEPARTMENT OR TEAM NAME</td><td class="right">PERIOD OR DATE</td></tr></table>
+  <p class="section-label">Section 2</p>
+  <h2 class="section-title">Notice / Scope Statement</h2>
+  <p class="body-text">Use this page for any framing text your report needs — a legal notice,
+  methodology note, disclaimer, or scope statement. Keep it short: two or three plain paragraphs.</p>
+  <p class="body-text">Second paragraph — who prepared the report, on whose behalf, and how it was validated.</p>
+  <table class="doc-footer"><tr><td>CONFIDENTIAL &middot; INTERNAL USE</td><td class="right">ORGANISATION NAME</td></tr></table>
+</div>
+
+<!-- =========================================================
+     PAGE 4 — REPORT OVERVIEW (executive summary cards)
+     ========================================================= -->
+<div class="page">
+  <table class="doc-header"><tr><td>REPORT TYPE &middot; DEPARTMENT OR TEAM NAME</td><td class="right">PERIOD OR DATE</td></tr></table>
+  <p class="section-label">Section 3</p>
+  <h2 class="section-title">Report Overview</h2>
+
+  <div class="exec-card">
+    <p class="label">Executive Summary</p>
+    <p class="text">2–4 sentence summary of the whole report: what happened, what was decided,
+    what remains open. This is the block a busy reader scans first.</p>
+  </div>
+  <div class="exec-card">
+    <p class="label">Context</p>
+    <p class="text">Background needed to make sense of the rest of the report — when/where it
+    happened, who was involved, why it matters.</p>
+  </div>
+  <div class="exec-card">
+    <p class="label">Compliance / Reference Context</p>
+    <p class="text">Any regulatory, contractual, or policy references that frame the report,
+    if applicable. Delete this card if not needed.</p>
+  </div>
+
+  <table class="doc-footer"><tr><td>CONFIDENTIAL &middot; INTERNAL USE</td><td class="right">ORGANISATION NAME</td></tr></table>
+</div>
+
+<!-- =========================================================
+     PAGE 5 — ATTENDANCE / PARTICIPANTS TABLE
+     ========================================================= -->
+<div class="page">
+  <table class="doc-header"><tr><td>REPORT TYPE &middot; DEPARTMENT OR TEAM NAME</td><td class="right">PERIOD OR DATE</td></tr></table>
+  <p class="section-label">Section 4</p>
+  <h2 class="section-title">Attendance / Participants</h2>
+
+  <table class="data-table">
+    <thead><tr>
+      <th>Name</th><th>Role / Function</th><th>Arrival</th><th>Departure</th><th>Status</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Full Name</td><td>Role</td><td>--:--</td><td>--:--</td><td>Present</td></tr>
+      <tr><td>Full Name</td><td>Role</td><td>--:--</td><td>--:--</td><td>Present</td></tr>
+      <tr><td>Full Name</td><td>Role</td><td>--:--</td><td>--:--</td><td>Excused</td></tr>
+    </tbody>
+  </table>
+
+  <table class="doc-footer"><tr><td>CONFIDENTIAL &middot; INTERNAL USE</td><td class="right">ORGANISATION NAME</td></tr></table>
+</div>
+
+<!-- =========================================================
+     PAGE 6 — COMPONENT LIBRARY (every reusable block, once each)
+     Duplicate any block below into your discussion / body pages.
+     ========================================================= -->
+<div class="page">
+  <table class="doc-header"><tr><td>REPORT TYPE &middot; DEPARTMENT OR TEAM NAME</td><td class="right">PERIOD OR DATE</td></tr></table>
+  <p class="section-label">Section 5</p>
+  <h2 class="section-title">Component Library</h2>
+
+  <h3 class="part-title">Discussion / Log Entries</h3>
+  <div class="speaker role-neutral">
+    <div class="badge-cell"><div class="badge">M</div></div>
+    <div class="bubble"><p class="who">Meeting Record</p><p class="said">Neutral, factual log entry — no attribution to a specific speaker.</p></div>
+  </div>
+  <div class="speaker role-a">
+    <div class="badge-cell"><div class="badge">AB</div></div>
+    <div class="bubble"><p class="who">Speaker Name (Role)</p><p class="said">What this person said, paraphrased in third person.</p></div>
+  </div>
+  <div class="speaker role-b">
+    <div class="badge-cell"><div class="badge">CD</div></div>
+    <div class="bubble"><p class="who">Another Speaker (Role)</p><p class="said">Their response, again paraphrased.</p></div>
+  </div>
+
+  <h3 class="part-title">Alert Callouts</h3>
+  <div class="alert alert-decision">
+    <p class="label">Alert — Decision</p>
+    <p class="field"><strong>Subject:</strong> What was decided.</p>
+    <p class="field"><strong>Fact:</strong> The concrete outcome.</p>
+    <p class="field"><strong>Implication:</strong> What it means going forward.</p>
+  </div>
+  <div class="alert alert-unresolved">
+    <p class="label">Alert — Unresolved / Suspended</p>
+    <p class="field"><strong>Subject:</strong> What's still open.</p>
+    <p class="field"><strong>Fact:</strong> Current state.</p>
+    <p class="field"><strong>Next Step:</strong> What happens next, and by when.</p>
+  </div>
+  <div class="alert alert-tension">
+    <p class="label">Alert — Tension / Blockage</p>
+    <p class="field"><strong>Subject:</strong> Point of disagreement or blockage.</p>
+    <p class="field"><strong>Fact:</strong> The core conflict.</p>
+    <p class="field"><strong>Status:</strong> How it currently stands.</p>
+  </div>
+  <div class="alert alert-projection">
+    <p class="label">Alert — Projection / Deadline</p>
+    <p class="field"><strong>Subject:</strong> What's upcoming.</p>
+    <p class="field"><strong>Fact:</strong> The deadline or projected date.</p>
+    <p class="field"><strong>Responsible Entity:</strong> Who owns it.</p>
+  </div>
+
+  <h3 class="part-title">Timeline</h3>
+  <div class="timeline-block">
+    <p class="label">Timeline — Topic Name</p>
+    <table class="timeline">
+      <tr><td class="dot-cell"><div class="dot"></div></td><td class="entry">Date | Milestone description.</td></tr>
+      <tr><td class="dot-cell"><div class="dot"></div></td><td class="entry">Date | Milestone description.</td></tr>
+      <tr><td class="dot-cell"><div class="dot"></div></td><td class="entry">Date | Milestone description.</td></tr>
+    </table>
+  </div>
+
+  <h3 class="part-title">Vote Block</h3>
+  <div class="vote-question"><p>Vote #1 — The question being voted on</p></div>
+  <div class="vote-date"><p class="label">Vote Date</p><p class="text">Placeholder date</p></div>
+  <table class="data-table">
+    <thead><tr><th>Voter</th><th>Group</th><th>Vote</th></tr></thead>
+    <tbody>
+      <tr><td>Full Name</td><td>Group</td><td>Favorable</td></tr>
+      <tr><td>Full Name</td><td>Group</td><td>Favorable</td></tr>
+      <tr><td>Summary: Favorable = 2</td><td>Unfavorable = 0</td><td>Abstention = 0</td></tr>
+    </tbody>
+  </table>
+  <div class="vote-result"><p class="label">Result</p><p class="text">Outcome statement, e.g. "Approved unanimously."</p></div>
+
+  <table class="doc-footer"><tr><td>CONFIDENTIAL &middot; INTERNAL USE</td><td class="right">ORGANISATION NAME</td></tr></table>
+</div>
+
+<!-- =========================================================
+     PAGE 7 — BODY / DETAILED SECTION (blank starting point)
+     Copy this page for each additional topic/agenda item.
+     ========================================================= -->
+<div class="page">
+  <table class="doc-header"><tr><td>REPORT TYPE &middot; DEPARTMENT OR TEAM NAME</td><td class="right">PERIOD OR DATE</td></tr></table>
+  <p class="section-label">Section 6</p>
+  <h2 class="section-title">Detailed Body Section</h2>
+
+  <h4 class="item-title">Topic / Item 1 — Title</h4>
+  <p class="body-text">Plain paragraph content goes here. Use <span class="category-label" style="display:inline;">category labels</span>
+  above a group of related items, <code>h4.item-title</code> for each item, and the speaker /
+  alert / timeline / vote components above for anything that needs structure.</p>
+
+  <table class="doc-footer"><tr><td>CONFIDENTIAL &middot; INTERNAL USE</td><td class="right">ORGANISATION NAME</td></tr></table>
+</div>
+
+</body>
+</html>
