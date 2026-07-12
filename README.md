@@ -11,7 +11,7 @@ A high-fidelity, production-grade frontend prototype for an AI-driven compliance
 
 The entry point of the application. Features a bold hero section with the product tagline, an animated gradient background, and a clear call-to-action. Below the fold, three interactive **Tier Cards** (Essential, Scope, Premium) showcase the different service levels with mock report thumbnails inside each card. Further down, the **Before/After block** visually demonstrates how raw meeting transcripts are transformed into polished compliance reports — a key value proposition for the product.
 
-![Landing Page](public/screenshots/01-landing-page.png)
+![Landing Page](public/screenshots/01.png)
 
 ---
 
@@ -19,24 +19,12 @@ The entry point of the application. Features a bold hero section with the produc
 
 Clean, minimal authentication pages with a centered card layout, email/password fields, and social login placeholders. The login system uses a simple cookie-based session (`sirus_session`) — no real backend auth is needed, but the flow is fully functional. Logging in sets the cookie and redirects to the main application; logging out clears it.
 
-![Login Page](public/screenshots/02-login.png)
+![Login Page](public/screenshots/02.png)
 
 ---
 
-### 3. Metadata & Compliance Selection Step (`/` — Center Panel)
 
-After logging in, the user lands back on the homepage where the center panel becomes the **"Create Meeting Report"** form. This is the first step of the report generation flow. The user selects:
-- **Compliance Type** — CSE (default), CSSCT, CA, or AG from a horizontal button group.
-- **Language** — English or French toggle.
-- **5-Step Tracker** — A reusable progress indicator showing the pipeline stages (Select Type → Upload → Processing → Review → Complete).
-
-Clicking "Start Processing" navigates to the Upload step. This component was built as a standalone `MetadataStep` to be reusable across routes.
-
-![Metadata Step](public/screenshots/03-metadata-step.png)
-
----
-
-### 4. Upload Step (`/upload`)
+### 3. Upload Step (`/upload`)
 
 The file upload interface. At the top, a **Confirmed Selection Bar** displays the chosen compliance type and language from the previous step (e.g., "CSE · English") with a "Change Processing Type" link back.
 
@@ -45,11 +33,11 @@ The main area features:
 - **4 required text fields**: Meeting Title, Organizer, Date, and Location.
 - A **"Start Processing" button** that remains disabled until at least one file is selected and all 4 fields are filled — this prevents accidental empty submissions.
 
-![Upload Step](public/screenshots/04-upload-step.png)
+![Upload Step](public/screenshots/03.png)
 
 ---
 
-### 5. AI Processing Animation (`/processing`)
+### 4. AI Processing Animation (`/processing`)
 
 **Creative Addition #1.** Instead of a generic loading spinner, we built a branded animated transition that turns the "AI is working" dead time into an intentional product moment.
 
@@ -58,11 +46,11 @@ The page reuses the 5-step `StepTracker` component from the Metadata step, but t
 
 Each step auto-advances after ~1.5 seconds, creating the illusion of a real backend pipeline at work. After all 5 steps complete, the user is automatically redirected to the Analyzer Dashboard.
 
-![Processing Animation](public/screenshots/05-processing-animation.png)
+![Processing Animation](public/screenshots/04.png)
 
 ---
 
-### 6. Analyzer Dashboard — Compliance & Risk Tab (`/analyzer`)
+### 5. Analyzer Dashboard — Compliance & Risk Tab (`/analyzer`)
 
 The centerpiece of the application. This is a complex, data-rich dashboard that presents the AI-generated compliance analysis.
 
@@ -76,11 +64,11 @@ The centerpiece of the application. This is a complex, data-rich dashboard that 
 - **Filter Sidebar** — Allows filtering findings by category (Regulatory, Procedural, etc.).
 - **Risk Minimap (Creative Addition #2)** — A slim vertical strip on the left edge of the findings table. Each colored block represents a finding, colored by category (red, amber, green, purple). This provides an at-a-glance visual scan of the risk distribution without reading every row.
 
-![Analyzer Compliance Tab](public/screenshots/06-analyzer-compliance.png)
+![Analyzer Compliance Tab](public/screenshots/05.png)
 
 ---
 
-### 7. Analyzer Dashboard — Speaker Analysis Tab (`/analyzer`)
+### 6. Analyzer Dashboard — Speaker Analysis Tab (`/analyzer`)
 
 This tab presents the AI-extracted speaker engagement data from the meeting transcript. It contains three tables:
 
@@ -90,21 +78,21 @@ This tab presents the AI-extracted speaker engagement data from the meeting tran
 
 **🤖 "Regenerate with AI" Button** — This is where the real AI integration lives. Clicking this button triggers a POST request to `/api/generate-analysis`, which sends a hardcoded CSE meeting transcript excerpt to the **Groq API** (using the `llama-3.3-70b-versatile` model). The LLM processes the transcript according to a strict system prompt and returns a structured JSON object containing the roles, engagement levels, and scorecard. The UI then dynamically re-renders all three tables with the AI-generated data and shows a green "AI Generated" badge. If no API key is configured, it gracefully falls back to the mock data.
 
-![Speaker Analysis Tab](public/screenshots/07-analyzer-speaker.png)
+![Speaker Analysis Tab](public/screenshots/06.png)
 
 ---
 
-### 8. Analyzer Dashboard — Numerical Data Tab (`/analyzer`)
+### 7. Analyzer Dashboard — Numerical Data Tab (`/analyzer`)
 
 A visual summary tab built entirely with CSS (no charting library). Contains:
 - **Speaking Time Distribution** — Horizontal bar chart showing percentage breakdown per speaker, with colored bars proportional to their speaking time.
 - **Overall Sentiment Flow** — A donut chart rendered with `conic-gradient`, showing the distribution of Neutral, Assertive, Collaborative, Confrontational, and Procedural sentiments across the meeting.
 
-![Numerical Data Tab](public/screenshots/08-analyzer-numerical.png)
+![Numerical Data Tab](public/screenshots/07.png)
 
 ---
 
-### 9. Quotation Request Flow (`/quotation`)
+### 8. Quotation Request Flow (`/quotation`)
 
 The conversion step. After previewing the compliance report, users can request a full report by selecting a service tier.
 
@@ -116,11 +104,11 @@ The conversion step. After previewing the compliance report, users can request a
 **Confirmation State:**
 After submission, the page transitions to a success screen with an animated bouncing green checkmark, a "Request Sent to Our Team" message, a receipt card summarizing the selected tier and notes, and a "Back to Dashboard" link.
 
-![Quotation Form](public/screenshots/09-quotation.png)
+![Quotation Form](public/screenshots/09.png)
 
 ---
 
-### 10. Document Editor (`/editor`)
+### 9. Document Editor (`/editor`)
 
 A rich document editing interface matching the reference screenshot `05`. Built as a visual shell (the formatting buttons are rendered but not wired to a real rich-text engine like Tiptap, since adding that dependency was out of scope).
 
@@ -140,11 +128,11 @@ A rich document editing interface matching the reference screenshot `05`. Built 
 
 **Footer:** Displays character and word counts (CHARS: 57,808 / WORDS: 10,886) and a red **"Save Changes"** button that shows a ✓ "Saved!" confirmation on click.
 
-![Document Editor](public/screenshots/10-editor.png)
+![Document Editor](public/screenshots/010.png)
 
 ---
 
-### 11. Admin Panel (`/admin`)
+### 10. Admin Panel (`/admin`)
 
 An internal-facing page for managing client report folders.
 
@@ -157,7 +145,7 @@ An internal-facing page for managing client report folders.
 - **"Open Editor"** action button on each row links to the Document Editor (`/editor`).
 - **"New Folder"** button in the top-right (visual only).
 
-![Admin Panel](public/screenshots/11-admin.png)
+![Admin Panel](public/screenshots/011.png)
 
 ---
 
