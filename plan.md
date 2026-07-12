@@ -4,6 +4,8 @@
 
 This doc is the single source of truth for the build. Everything below is pulled directly from the material the hiring manager sent — the proposal doc, the workflow deck, the raw transcript sample, the design template, the actual generated report, the speaker-analysis sample, and the 5 product screenshots. Nothing here is invented; where something is genuinely unclear, it's flagged as an open question instead of guessed at.
 
+**Update log:** after Chunk 4 (metadata + compliance selection step) was completed and committed, two creative additions were agreed on and added below — a Processing/pipeline animation and a compliance risk minimap. Chunks 1–5 are untouched; the new chunk was inserted as **Chunk 6**, and everything after it shifted down by one number. If you already have local notes referencing the old Chunk 6/7/8/etc., re-check against the numbers below.
+
 ---
 
 ## 1. What this project actually is (one paragraph)
@@ -39,6 +41,7 @@ There are two sides to the product: **client-facing** (the part the hiring manag
 1. Sign up (hard gate — no upload/preview without an account)
 2. Company & meeting metadata — region, compliance type, language
 3. Upload — meeting recording (+ optional supporting docs: policies, contracts, prior minutes)
+3.5. **Processing screen (creative addition — see Chunk 6)** — a short animated pipeline step between Upload and the Snapshot reveal, so the "AI working" moment feels intentional rather than a generic spinner
 4. **Instant Compliance Snapshot** — a small/lightweight LLM (not the full transcription model) reads the upload(s) together and produces 5 fixed, read-only outputs: Compliance Status, Risk & Gap Findings, Speaker Analysis, Numerical Data, Recommendations. Not editable, not downloadable. Same 5 outputs regardless of file type or tier — only the depth of the *real* report later differs by tier.
 5. Tier selection (Essential / Scope / Premium) + Quotation request → sent to admin
 
@@ -65,6 +68,8 @@ The workflow deck is explicit that this is a fixed set, always these 5, regardle
 5. **Recommendations** — actionable next steps
 
 The **Report Analyzer dashboard** (`reference/04-report-analyzer-dashboard.png`) is the best concrete reference for how to lay out #1, #2, and #5 together (compliance score ring, risk summary tiles, filterable findings table). Speaker Analysis (#3) and Numerical Data (#4) don't have a screenshot reference — build them as additional tabs/pages in the same viewer, using the `speaker_analysis_report.pdf` content structure for #3, and simple bar/line/donut charts for #4.
+
+**Creative addition #2 — risk minimap (see Chunk 7):** alongside the findings table, add a slim vertical strip with one colored segment per report section (green/yellow/red by that section's risk level), so problem areas are visible at a glance instead of requiring a full read-through. Not in any reference screenshot — this is an original addition.
 
 ---
 
@@ -109,15 +114,20 @@ Given it's one round and the explicit instruction is "focus especially on the UI
 2. Sign up / login (can be minimal — doesn't need real auth backend, but should look and behave real)
 3. Metadata + compliance selection step (`01` center panel)
 4. Upload step (`02`)
-5. Compliance Snapshot preview — all 5 outputs, read-only, using `04`'s dashboard as the primary layout
-6. Quotation form (tier selection + notes) with a confirmation state
-7. Tier comparison (Essential/Scope/Premium cards, reusable — landing page + quotation step)
+5. Processing / AI pipeline animation — **creative addition #1**, see below
+6. Compliance Snapshot preview — all 5 outputs, read-only, using `04`'s dashboard as the primary layout, plus the risk minimap (**creative addition #2**, see below)
+7. Quotation form (tier selection + notes) with a confirmation state
+8. Tier comparison (Essential/Scope/Premium cards, reusable — landing page + quotation step)
+
+**Creative additions (agreed on, both now Must-Build):**
+- **#1 — Processing/pipeline animation.** A branded animated step between Upload and the Compliance Snapshot reveal — the same 5-step tracker from Chunk 4, but live: each stage lights up in sequence with a short transition, instead of a generic spinner. Turns "AI is working" dead time into a moment that feels intentional. **Built in Chunk 6.**
+- **#2 — Compliance risk minimap.** A slim colored strip next to the Compliance Snapshot's findings table — one segment per report section, colored green/yellow/red by risk level, so problem areas are visible at a glance. Not in any reference screenshot; original addition. **Built in Chunk 7.**
 
 **Stretch (build only if the must-build list is fully polished first):**
-8. Document Editor (`05`) — well-specified, good ROI if you have time
-9. Admin panel — client folder list + status (skip the drag-and-drop broadcast workspace and full CRM; too much for the time available)
-10. Homepage sample-report library (nice-to-have, not core to proving UI competence)
-11. Voice assistant UI — pptx describes voice-driven corrections, note-taking, email-sending; this is a lot of surface area for a stretch item, so at most build a chat-widget shell, don't try to wire real speech
+9. Document Editor (`05`) — well-specified, good ROI if you have time
+10. Admin panel — client folder list + status (skip the drag-and-drop broadcast workspace and full CRM; too much for the time available)
+11. Homepage sample-report library (nice-to-have, not core to proving UI competence)
+12. Voice assistant UI — pptx describes voice-driven corrections, note-taking, email-sending; this is a lot of surface area for a stretch item, so at most build a chat-widget shell, don't try to wire real speech
 
 **Deliberately out of scope for this round** (call this out explicitly if asked, don't silently skip): real Deepgram integration, real multilingual voice agent, admin CRM/broadcast workspace, actual payment/pricing logic.
 
@@ -191,7 +201,7 @@ Each chunk ends with a **commit + push to GitHub** before starting the next one.
 - Set up folder structure: `/app`, `/components`, `/lib/mock-data`, `/styles/tokens.css`
 - Add both token sets from Section 7 as CSS variables
 - Add a basic layout shell (nav placeholder, container widths)
-- **Commit:** `initial and design tokens`
+- **Commit:** `chore: project scaffold + design tokens`
 
 ### Chunk 2 — Landing page
 - Hero section (`01` left panel copy/layout)
@@ -217,36 +227,44 @@ Each chunk ends with a **commit + push to GitHub** before starting the next one.
 - Wire "Start" to move to the next step once required fields are valid
 - **Commit:** `feat: upload step`
 
-### Chunk 6 — Compliance Snapshot (the centerpiece screen)
+### Chunk 6 — Processing / AI pipeline animation (creative addition #1)
+- New screen shown right after "Start" is clicked on Upload, before the Compliance Snapshot reveals
+- Reuse the 5-step tracker component from Chunk 4, but make it play live: each stage (Upload Recordings → AI Transcribes Audio → Reformulate & Edit Minutes → Compliance Check → Report Ready to Distribute) lights up in sequence with a short transition between them — CSS transitions are fine, framer-motion if you want it smoother
+- Keep total duration short (a few seconds) — this is a `setTimeout`/interval-driven mock sequence, not tied to a real backend job unless Chunk 9's real AI call is already wired in
+- Auto-advances to the Compliance Snapshot screen once the sequence finishes
+- **Commit:** `feat: animated processing step`
+
+### Chunk 7 — Compliance Snapshot (the centerpiece screen)
 - Build the dashboard layout from `04`: Compliance Score ring, Risk Summary tiles, Risk Exposure slider, Findings tabs + table, Filter sidebar
 - Add two more tabs/sections: Speaker Analysis (structure it after `speaker_analysis_report.pdf` — role table, engagement table, comparison table, scorecard) and Numerical Data (2-3 simple charts)
+- Add the risk minimap (creative addition #2): a slim vertical strip beside the findings table, one colored segment per report section (green/yellow/red by risk level) — clicking a segment scrolls/filters the table to that section
 - Populate everything from a mock JSON fixture that looks like real LLM output
 - Mark the whole screen visibly read-only (watermark/lock icon, no download button)
-- **Commit:** `feat: compliance snapshot preview (5 fixed outputs)`
+- **Commit:** `feat: compliance snapshot preview (5 fixed outputs + risk minimap)`
 
-### Chunk 7 — Quotation request flow
+### Chunk 8 — Quotation request flow
 - Form: tier selection (reuse tier cards) + notes field
 - Submit → confirmation screen ("Request sent to our team")
 - **Commit:** `feat: quotation request flow`
 
-### Chunk 8 — Real AI call (optional but recommended)
-- One API route that takes the raw transcript sample, calls a real LLM, and returns a Speaker Analysis JSON matching your Chunk 6 shape
+### Chunk 9 — Real AI call (optional but recommended)
+- One API route that takes the raw transcript sample, calls a real LLM, and returns a Speaker Analysis JSON matching your Chunk 7 shape
 - Wire a "Regenerate with AI" button on the Speaker Analysis tab to hit it live
 - **Commit:** `feat: live AI speaker-analysis generation`
 
-### Chunk 9 — Document Editor (stretch)
+### Chunk 10 — Document Editor (stretch)
 - Previewer/Editor toggle
 - Rich text toolbar (Tiptap) with a subset of the buttons in `05` — don't try to replicate every icon
 - Render report content using `.kv-table` / `.exec-card` / `.speaker` classes from the Blue Design Template
 - Save Changes (local state is fine)
 - **Commit:** `feat: document editor (admin)`
 
-### Chunk 10 — Admin panel basics (stretch)
+### Chunk 11 — Admin panel basics (stretch)
 - Simple client-folder list with status pills (Awaiting Transcription / In Editing / Locked / Dispatched)
-- Click into a folder → shows the Document Editor from Chunk 9
+- Click into a folder → shows the Document Editor from Chunk 10
 - **Commit:** `feat: admin panel — client folder list`
 
-### Chunk 11 — Polish pass
+### Chunk 12 — Polish pass
 - Responsive check (at least tablet width, screenshots suggest desktop-first is fine)
 - Loading/empty/error states on the upload → snapshot transition
 - README with setup steps + a one-paragraph explanation of what's mocked vs. real
@@ -257,6 +275,7 @@ Each chunk ends with a **commit + push to GitHub** before starting the next one.
 ## 11. Final submission checklist
 
 - [ ] Every Must-Build item from Section 6 is done and looks intentional, not placeholder-y
+- [ ] Both creative additions (processing animation, risk minimap) are visibly working, not half-wired
 - [ ] Colors/spacing consistent with Section 7 tokens throughout — no default Tailwind blue/gray leaking in
 - [ ] Compliance Snapshot clearly reads as "preview only" (no way to download/edit it)
 - [ ] README explains: what's real AI vs. mocked, how to run it, and what you'd build next given more time
