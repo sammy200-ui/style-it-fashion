@@ -1,19 +1,75 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { analyzerMockData } from "@/lib/mock-data/analyzer";
 
+type SpeakerRole = { id: string; role: string; phase: string; votingBloc: string };
+type SpeakerEngagement = { id: string; count: string; level: number; nature: string; interest: string };
+type SpeakerScore = { id: string; volume: number; quality: number; power: number; impact: number; overall: number };
+
+interface SpeakerData {
+  roles: SpeakerRole[];
+  engagement: SpeakerEngagement[];
+  scorecard: SpeakerScore[];
+}
+
 export function SpeakerAnalysisTab() {
-  const { speakerAnalysis } = analyzerMockData;
+  const [data, setData] = useState<SpeakerData>(analyzerMockData.speakerAnalysis);
+  const [loading, setLoading] = useState(false);
+  const [source, setSource] = useState<"mock" | "ai">("mock");
+
+  const handleRegenerate = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/generate-analysis", { method: "POST" });
+      const json = await res.json();
+      setData(json.data);
+      setSource(json.source);
+    } catch {
+      // Keep existing data on failure
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
-        <div className="mb-6 border-b border-border-light pb-4">
-          <h2 className="text-lg font-bold text-ink">Speaker Engagement & Contribution Analysis</h2>
-          <p className="text-sm text-text-secondary mt-1">
-            Extraordinary CSE Session — Medical unfitness procedure consultation.
-          </p>
+        <div className="mb-6 flex items-start justify-between border-b border-border-light pb-4">
+          <div>
+            <h2 className="text-lg font-bold text-ink">Speaker Engagement & Contribution Analysis</h2>
+            <p className="text-sm text-text-secondary mt-1">
+              Extraordinary CSE Session — Medical unfitness procedure consultation.
+            </p>
+            {source === "ai" && (
+              <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-bold text-success">
+                <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                AI Generated
+              </span>
+            )}
+          </div>
+          <button
+            onClick={handleRegenerate}
+            disabled={loading}
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-primary-deep hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+          >
+            {loading ? (
+              <>
+                <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="32" className="opacity-25" />
+                  <path d="M12 2a10 10 0 0 1 10 10" className="opacity-75" />
+                </svg>
+                Generating…
+              </>
+            ) : (
+              <>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M12 2v20M17 5l-10 14M7 5l10 14M2 12h20" />
+                </svg>
+                Regenerate with AI
+              </>
+            )}
+          </button>
         </div>
 
         {/* 1. SPEAKER IDENTIFICATION & ROLE MAPPING */}
@@ -30,7 +86,7 @@ export function SpeakerAnalysisTab() {
                 </tr>
               </thead>
               <tbody>
-                {speakerAnalysis.roles.map((role, idx) => (
+                {data.roles.map((role, idx) => (
                   <tr key={idx} className="border-b border-border-light/50 hover:bg-bg-tint/30 transition-colors">
                     <td className="py-3 px-4 font-semibold text-primary">{role.id}</td>
                     <td className="py-3 px-4 text-ink">{role.role}</td>
@@ -58,7 +114,7 @@ export function SpeakerAnalysisTab() {
                 </tr>
               </thead>
               <tbody>
-                {speakerAnalysis.engagement.map((eng, idx) => (
+                {data.engagement.map((eng, idx) => (
                   <tr key={idx} className="border-b border-border-light/50 hover:bg-bg-tint/30 transition-colors">
                     <td className="py-3 px-4 font-semibold text-primary">{eng.id}</td>
                     <td className="py-3 px-4 text-center">
@@ -100,7 +156,7 @@ export function SpeakerAnalysisTab() {
                 </tr>
               </thead>
               <tbody>
-                {speakerAnalysis.scorecard.map((score, idx) => (
+                {data.scorecard.map((score, idx) => (
                   <tr key={idx} className="border-b border-border-light/50 hover:bg-bg-tint/30 transition-colors">
                     <td className="py-4 px-4 font-semibold text-primary text-left">{score.id}</td>
                     <td className="py-4 px-4">{score.volume}/5</td>

@@ -1,0 +1,222 @@
+/* ============================================================
+   REPORT CONTENT STYLES
+   Extracted from Report_Design_Template Blue.html
+   Scoped under .report-content to avoid leaking into the app.
+   ============================================================ */
+
+.report-content {
+  --report-accent: #2F69FF;
+  --report-accent-dark: #101936;
+  --report-accent-gold: #F6BF2F;
+  --report-ink: #101936;
+  --report-ink-soft: #25304B;
+  --report-muted: #9AA8C2;
+  --report-line: #E2E8F3;
+  --report-line-soft: #ECF1F8;
+  --report-bg-tint: #F5F8FD;
+  --report-ok: #198C61;
+  --report-warn: #B98313;
+  --report-danger: #D94B4B;
+  --report-info: #7A5AF8;
+
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  color: var(--report-ink);
+  font-size: 15px;
+  line-height: 1.68;
+}
+
+/* ---- key/value definition table ---- */
+.report-content table.kv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 0 0 22px 0;
+}
+.report-content table.kv-table td.k {
+  width: 34%;
+  padding: 13px 16px;
+  color: var(--report-muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: var(--report-bg-tint);
+  vertical-align: top;
+  border-bottom: 1px solid var(--report-line-soft);
+}
+.report-content table.kv-table td.v {
+  padding: 13px 16px;
+  color: var(--report-ink);
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--report-line-soft);
+  vertical-align: top;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+/* ---- executive summary card ---- */
+.report-content .exec-card {
+  padding: 20px 24px;
+  background: var(--report-bg-tint);
+  border-left: 4px solid var(--report-accent);
+  border-radius: 12px;
+  margin: 0 0 18px 0;
+}
+.report-content .exec-card .label {
+  margin: 0 0 9px 0;
+  color: var(--report-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+.report-content .exec-card .text {
+  margin: 0;
+  color: var(--report-ink);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ---- section headings ---- */
+.report-content .section-label {
+  margin: 0 0 8px 0;
+  color: var(--report-accent);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 2.8px;
+  text-transform: uppercase;
+}
+.report-content h2.section-title {
+  margin: 0 0 28px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--report-line);
+  color: var(--report-ink);
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 900;
+}
+.report-content h3.part-title {
+  margin: 30px 0 16px 0;
+  color: var(--report-ink);
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 900;
+  border-bottom: 1px solid var(--report-line);
+  padding-bottom: 10px;
+}
+
+/* ---- striped data table ---- */
+.report-content table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 22px 0;
+}
+.report-content table.data-table thead th {
+  padding: 11px 12px;
+  background: var(--report-accent-dark);
+  color: #FFFFFF;
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: left;
+  vertical-align: top;
+}
+.report-content table.data-table tbody td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--report-line-soft);
+  color: var(--report-ink-soft);
+  font-size: 13px;
+  line-height: 1.45;
+  vertical-align: top;
+}
+.report-content table.data-table tbody tr:nth-child(even) td {
+  background: var(--report-bg-tint);
+}
+
+/* ---- speaker bubble ---- */
+.report-content .speaker {
+  display: flex;
+  gap: 16px;
+  margin: 0 0 16px 0;
+}
+.report-content .speaker .badge {
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  border-radius: 50%;
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+  background: var(--report-accent);
+}
+.report-content .speaker .bubble {
+  flex: 1;
+  padding: 16px 20px;
+  background: #FFFFFF;
+  border: 1px solid #DCE5F2;
+  border-left: 4px solid var(--report-accent);
+  border-radius: 10px;
+}
+.report-content .speaker .who {
+  margin: 0 0 7px 0;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--report-accent);
+}
+.report-content .speaker .said {
+  margin: 0;
+  color: var(--report-ink-soft);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* role color modifiers */
+.report-content .speaker.role-b .badge { background: var(--report-ok); }
+.report-content .speaker.role-b .bubble { border-left-color: var(--report-ok); }
+.report-content .speaker.role-b .who { color: var(--report-ok); }
+
+/* ---- alert callouts ---- */
+.report-content .alert {
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin: 0 0 14px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.report-content .alert .alert-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.report-content .alert-decision {
+  background: #EEF9F3;
+  border-left: 4px solid var(--report-ok);
+  color: var(--report-ok);
+}
+.report-content .alert-unresolved {
+  background: #FFF8E6;
+  border-left: 4px solid var(--report-warn);
+  color: var(--report-warn);
+}
+.report-content .alert-tension {
+  background: #FEECEC;
+  border-left: 4px solid var(--report-danger);
+  color: var(--report-danger);
+}
+
+/* ---- body text ---- */
+.report-content p.body-text {
+  margin: 0 0 12px 0;
+  color: var(--report-ink-soft);
+  font-size: 15px;
+  line-height: 1.68;
+}
