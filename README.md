@@ -6,11 +6,6 @@ A high-fidelity, production-grade frontend prototype for an AI-driven compliance
 
 ---
 
-## 📸 Screenshots
-
-> **To add screenshots:** Take screenshots of each page listed below and save them into the `public/screenshots/` folder with the exact filenames specified. The README will automatically display them.
-
----
 
 ### 1. Landing Page — Hero & Marketing (`/`)
 
